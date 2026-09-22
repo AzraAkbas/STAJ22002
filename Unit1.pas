@@ -58,7 +58,6 @@ begin
 
   vExePath := ExtractFilePath(Application.ExeName);
 
-  // Veritabanı dosyasının konumunu otomatik bulma
   vDbYolu := vExePath + 'Ilac_Takip_DB.db';
   if not FileExists(vDbYolu) then
     vDbYolu := ExpandFileName(vExePath + '..\Ilac_Takip_DB.db');
@@ -120,7 +119,6 @@ begin
 
     if not FDQuery1.Eof then
     begin
-      // Şifre Hash Kontrolü
       if not SameText(FDQuery1.FieldByName('SifreHash').AsString, vSifreHash) then
       begin
         ShowMessage('Hatalı şifre girdiniz!');
