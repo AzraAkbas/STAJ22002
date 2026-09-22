@@ -64,7 +64,7 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure BtnGecmisReceteClick(Sender: TObject);
     procedure ComboIlacSecimiChange(Sender: TObject);
-    procedure ComboIlacSecimiDropDown(Sender: TObject); // 🌟 Açılır listeye basılınca tetiklenir
+    procedure ComboIlacSecimiDropDown(Sender: TObject); 
   private
     { Private declarations }
     FCurrentHastaID: Integer;
@@ -82,8 +82,8 @@ var
   Form3: TForm3;
 
 const
-  REAL_AES_KEY = 'K9f!X2#mP8$zL5*q'; // 16 Byte Python Anahtarı
-  REAL_AES_IV  = 'r4#mQ9$zK2!pL5*x'; // 16 Byte Python IV Değeri
+  REAL_AES_KEY = 'K9f!X2#mP8$zL5*q'; 
+  REAL_AES_IV  = 'r4#mQ9$zK2!pL5*x'; 
 
 implementation
 
@@ -91,9 +91,6 @@ implementation
 
 uses Unit1, Unit4;
 
-{-------------------------------------------------------------------------------
-  🔒 GÜVENLİ WINDOWS CNG AES-128 CBC DEŞİFRE FONKSİYONU
--------------------------------------------------------------------------------}
 type
   BCRYPT_ALG_HANDLE = Pointer;
   BCRYPT_KEY_HANDLE = Pointer;
@@ -207,9 +204,6 @@ begin
   FreeLibrary(hBCryptLib);
 end;
 
-{-------------------------------------------------------------------------------
-  Giriş Kutularını Sıfırlayan Prosedür
--------------------------------------------------------------------------------}
 procedure TForm3.InputAlanlariniTemizle;
 var
   i: Integer;
@@ -226,9 +220,6 @@ begin
   EditAdet.Clear;
 end;
 
-{-------------------------------------------------------------------------------
-  Form Kurulum Ayarları
--------------------------------------------------------------------------------}
 procedure TForm3.FormCreate(Sender: TObject);
 begin
   Self.Position := poMainFormCenter;
@@ -243,7 +234,7 @@ begin
   ComboIlacSecimi.AutoComplete := False;
   ComboIlacSecimi.Style := csDropDown;
   ComboIlacSecimi.OnChange := ComboIlacSecimiChange;
-  ComboIlacSecimi.OnDropDown := ComboIlacSecimiDropDown; // 🌟 Açılır ok simgesine tıklandığında çalışır
+  ComboIlacSecimi.OnDropDown := ComboIlacSecimiDropDown; 
 
   if clbOgunler.Items.Count = 0 then
   begin
@@ -264,9 +255,6 @@ begin
   Self.OnClose := FormClose;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 ARAMA METNİ BOŞSA TÜM İLAÇLARI, DOLUYSA FİLTRELİ İLAÇLARI GETİRİR
--------------------------------------------------------------------------------}
 procedure TForm3.IlaclariYukle(const AAramaMetni: string = '');
 var
   GorunurIsim, AramaTerm: string;
@@ -282,7 +270,6 @@ begin
 
     if AramaTerm = '' then
     begin
-      // 🌟 BOŞSA: VERİTABANINDAKİ TÜM İLAÇLAR LİSTELENİR
       FDQueryIlaclar.SQL.Text :=
         'SELECT IlacID, IlacAdi, ' +
         '       CASE WHEN EtkenMadde IS NULL THEN '''' ELSE EtkenMadde END AS EtkenMadde ' +
@@ -290,7 +277,6 @@ begin
     end
     else
     begin
-      // 🔍 DOLUYSA: HEM İLAÇ ADINDA HEM ETKEN MADDEDE ARAMA YAPAR
       FDQueryIlaclar.SQL.Text :=
         'SELECT IlacID, IlacAdi, ' +
         '       CASE WHEN EtkenMadde IS NULL THEN '''' ELSE EtkenMadde END AS EtkenMadde ' +
@@ -324,25 +310,19 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 OK SİMGESİNE TIKLANDIĞINDA VEYA AÇILDIĞINDA BOŞSA TÜMÜNÜ LİSTELE
--------------------------------------------------------------------------------}
 procedure TForm3.ComboIlacSecimiDropDown(Sender: TObject);
 begin
   if Trim(ComboIlacSecimi.Text) = '' then
   begin
     ComboIlacSecimi.OnChange := nil;
     try
-      IlaclariYukle(''); // Tümü yuklenir
+      IlaclariYukle('');
     finally
       ComboIlacSecimi.OnChange := ComboIlacSecimiChange;
     end;
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 CANLI YAZDIKÇA SÜZME / SİLİNDİĞİNDE TÜMÜNÜ AÇMA
--------------------------------------------------------------------------------}
 procedure TForm3.ComboIlacSecimiChange(Sender: TObject);
 var
   MevcutMetin: string;
@@ -351,9 +331,8 @@ begin
 
   MevcutMetin := ComboIlacSecimi.Text;
 
-  ComboIlacSecimi.OnChange := nil; // Sonsuz döngü engeli
+  ComboIlacSecimi.OnChange := nil; 
   try
-    // 🌟 Metin tamamen silindiyse tüm listeyi çek
     if Trim(MevcutMetin) = '' then
     begin
       IlaclariYukle('');
@@ -361,7 +340,6 @@ begin
     end
     else
     begin
-      // Metin yazıldıysa filtrele
       IlaclariYukle(MevcutMetin);
       ComboIlacSecimi.Text := MevcutMetin;
       ComboIlacSecimi.SelStart := Length(MevcutMetin);
@@ -374,9 +352,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Hasta Verilerini Yükleme
--------------------------------------------------------------------------------}
 procedure TForm3.HastaYukle(const AHastaID: Integer; const ADoktorID: Integer);
 var
   RawAlerji, CinsiyetDurumu: string;
@@ -390,7 +365,7 @@ begin
     FDQueryIlaclar.Connection := FrmLogin.FDConnection1;
   end;
 
-  IlaclariYukle(''); // Ilk acilista da tum liste yuklenir
+  IlaclariYukle(''); 
   ListView1.Items.Clear;
 
   FDQueryHasta.Close;
@@ -467,9 +442,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  ➕ İLAÇ EKLE BUTONU (BtnIlacEkle)
--------------------------------------------------------------------------------}
 procedure TForm3.BtnIlacEkleClick(Sender: TObject);
 var
   Item: TListItem;
@@ -513,9 +485,6 @@ begin
   InputAlanlariniTemizle;
 end;
 
-{-------------------------------------------------------------------------------
-  ❌ İLAÇ SİL BUTONU (BtnIlacSil)
--------------------------------------------------------------------------------}
 procedure TForm3.BtnIlacSilClick(Sender: TObject);
 begin
   if Assigned(ListView1.Selected) then
@@ -524,9 +493,6 @@ begin
     ShowMessage('Lütfen silmek istediğiniz ilacı listeden seçiniz!');
 end;
 
-{-------------------------------------------------------------------------------
-  💾 REÇETE KAYDET BUTONU (BtnKaydet)
--------------------------------------------------------------------------------}
 procedure TForm3.BtnKaydetClick(Sender: TObject);
 var
   YeniReceteID, SecilenIlacID, i: Integer;
