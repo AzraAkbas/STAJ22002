@@ -14,21 +14,21 @@ type
     pnlTop: TPanel;
     pnlFormContainer: TPanel;
 
-    Label1: TLabel; // Form Başlığı
-    Label2: TLabel; // Barkod Label
+    Label1: TLabel; 
+    Label2: TLabel; 
     edtBarkod: TEdit;
 
-    Label3: TLabel; // İlaç Adı Label
+    Label3: TLabel;
     edtIlacAdi: TEdit;
     cbTur: TComboBox;
 
-    Label4: TLabel; // Etken Madde Label
+    Label4: TLabel; 
     edtEtkenMadde: TEdit;
 
-    Label5: TLabel; // Merkez Stok Label
+    Label5: TLabel; 
     edtMerkezStok: TEdit;
 
-    Label6: TLabel; // Kritik Eşik Label
+    Label6: TLabel;
     edtKritikEsik: TEdit;
 
     btnKaydet: TPanel;
@@ -48,7 +48,7 @@ type
     function BarkodVarMi(const ABarkod: string; const AHaricIlacID: Integer = 0): Boolean;
   public
     procedure FormuDuzenlemeModundaAc(const AIlacID: Integer);
-    procedure FormuYeniKayitModundaAc; // 🌟 Yeni Kayıt Modu Metodu
+    procedure FormuYeniKayitModundaAc; 
   end;
 
 var
@@ -126,17 +126,11 @@ begin
     Label1.Caption := 'YENİ İLAÇ KAYIT FORMU';
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 YENİ KAYIT MODU
--------------------------------------------------------------------------------}
 procedure TForm12.FormuYeniKayitModundaAc;
 begin
   FormuTemizle;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 DÜZENLEME MODU
--------------------------------------------------------------------------------}
 procedure TForm12.FormuDuzenlemeModundaAc(const AIlacID: Integer);
 var
   GetQuery: TFDQuery;
