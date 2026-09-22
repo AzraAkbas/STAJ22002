@@ -59,12 +59,11 @@ begin
   Font.Size := 11;
   Font.Name := 'Segoe UI';
 
-  // 🌟 GEÇMİŞ UYGULAMALAR GRID FONT AYARLARI (Yazı boyutu büyütüldü & Başlıklar kalın yapıldı)
   dbGridGecmis.Font.Name := 'Segoe UI';
-  dbGridGecmis.Font.Size := 11;              // Hücre içi yazı boyutu
+  dbGridGecmis.Font.Size := 11;             
   dbGridGecmis.TitleFont.Name := 'Segoe UI';
-  dbGridGecmis.TitleFont.Size := 11;         // Başlık yazı boyutu
-  dbGridGecmis.TitleFont.Style := [fsBold];  // Başlıklar kalın (Bold)
+  dbGridGecmis.TitleFont.Size := 11;         
+  dbGridGecmis.TitleFont.Style := [fsBold];  
 
   if Assigned(FrmLogin) and Assigned(FrmLogin.FDConnection1) then
   begin
@@ -98,19 +97,19 @@ end;
 
 procedure TForm7.SutunGenislikleriniAyarla;
 begin
-  // 🌟 Büyüyen başlık ve veri fontlarına uygun genişlikler
+
   if dbGridGecmis.Columns.Count >= 10 then
   begin
-    dbGridGecmis.Columns[0].Width := 120; // Tarih
-    dbGridGecmis.Columns[1].Width := 150; // Hemşire Adı
-    dbGridGecmis.Columns[2].Width := 150; // Hasta Adı
-    dbGridGecmis.Columns[3].Width := 170; // İlaç Adı
-    dbGridGecmis.Columns[4].Width := 130; // Parti No
-    dbGridGecmis.Columns[5].Width := 120; // İlaç SKT
-    dbGridGecmis.Columns[6].Width := 90;  // Doz
-    dbGridGecmis.Columns[7].Width := 120;  // Öğün
-    dbGridGecmis.Columns[8].Width := 140; // Durum
-    dbGridGecmis.Columns[9].Width := 160; // Gerekçe
+    dbGridGecmis.Columns[0].Width := 120; 
+    dbGridGecmis.Columns[1].Width := 150; 
+    dbGridGecmis.Columns[2].Width := 150; 
+    dbGridGecmis.Columns[3].Width := 170; 
+    dbGridGecmis.Columns[4].Width := 130; 
+    dbGridGecmis.Columns[5].Width := 120; 
+    dbGridGecmis.Columns[6].Width := 90;  
+    dbGridGecmis.Columns[7].Width := 120; 
+    dbGridGecmis.Columns[8].Width := 140; 
+    dbGridGecmis.Columns[9].Width := 160; 
   end;
 end;
 
@@ -123,7 +122,6 @@ begin
 
   AramaMetni := Trim(edtAramaGecmis.Text);
 
-  // SQL Sorgusunda başlık takma adları (Alias) okunaklı hale getirildi
   SqlSorgu :=
     'SELECT ' +
     '    date(TU.UygulamaTarihi) AS [Tarih], ' +
@@ -173,7 +171,6 @@ begin
     dbGridGecmis.DataSource := DataSource1;
     dbGridGecmis.ReadOnly := True;
 
-    // Sütun genişliklerini yeni yazı tiplerine göre ayarla
     SutunGenislikleriniAyarla;
 
   except
