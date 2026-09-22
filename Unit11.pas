@@ -27,7 +27,7 @@ type
     procedure dtpGecmisTarihChange(Sender: TObject);
     procedure dbGridGecmisDrawColumnCell(Sender: TObject; const Rect: TRect;
       DataCol: Integer; Column: TColumn; State: TGridDrawState);
-    procedure dbGridGecmisDblClick(Sender: TObject); // 🌟 Çift Tıklama Garantili Yöntem
+    procedure dbGridGecmisDblClick(Sender: TObject); 
   private
     procedure GecmisTalepleriYukle;
     procedure SütunGenislikleriniAyarla;
@@ -46,9 +46,6 @@ implementation
 
 uses Unit1;
 
-{-------------------------------------------------------------------------------
-  FormCreate: Bağlantı ve olay atamaları
--------------------------------------------------------------------------------}
 procedure TForm11.FormCreate(Sender: TObject);
 begin
   Self.Caption := 'Ecza Deposu Talep Geçmişi ve Teslimat';
@@ -73,7 +70,6 @@ begin
   dbGridGecmis.DataSource := DataSourceGecmis;
   DataSourceGecmis.DataSet := qryGecmis;
 
-  // 🌟 Talep Geçmişi Grid Font Ayarları (Yazı Boyutu: 11, Başlıklar: 11 Bold)
   dbGridGecmis.Font.Name := 'Segoe UI';
   dbGridGecmis.Font.Size := 11;
   dbGridGecmis.TitleFont.Name := 'Segoe UI';
@@ -88,34 +84,25 @@ begin
   AktifEczaciID := 0;
 end;
 
-{-------------------------------------------------------------------------------
-  FormActivate: Form açılınca veriler yüklenir
--------------------------------------------------------------------------------}
 procedure TForm11.FormActivate(Sender: TObject);
 begin
   GecmisTalepleriYukle;
 end;
 
-{-------------------------------------------------------------------------------
-  FormClose: Hafızadan temizleme
--------------------------------------------------------------------------------}
 procedure TForm11.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
   Form11 := nil;
 end;
 
-{-------------------------------------------------------------------------------
-  Grid Başlıklarını Türkçeleştirme ve Kalınlaştırma
--------------------------------------------------------------------------------}
 procedure TForm11.BasliklariTurkceYap;
 var
   i: Integer;
 begin
   if dbGridGecmis.Columns.Count >= 7 then
   begin
-    dbGridGecmis.Columns[0].Visible := False; // SiparisID
-    dbGridGecmis.Columns[1].Visible := False; // IlacID
+    dbGridGecmis.Columns[0].Visible := False; 
+    dbGridGecmis.Columns[1].Visible := False; 
     dbGridGecmis.Columns[2].Title.Caption := 'İlaç Adı';
     dbGridGecmis.Columns[3].Title.Caption := 'Etken Madde';
     dbGridGecmis.Columns[4].Title.Caption := 'Talep Edilen Adet';
@@ -131,9 +118,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Sütun Genişliklerini Ayarlama (11 pt fonta uygun güncellendi)
--------------------------------------------------------------------------------}
 procedure TForm11.SütunGenislikleriniAyarla;
 var
   i: Integer;
@@ -141,21 +125,18 @@ begin
   for i := 0 to dbGridGecmis.Columns.Count - 1 do
   begin
     case i of
-      0, 1: dbGridGecmis.Columns[i].Width := 0;   // Gizli ID'ler
-      2:    dbGridGecmis.Columns[i].Width := 210; // İlaç Adı
-      3:    dbGridGecmis.Columns[i].Width := 210; // Etken Madde
-      4:    dbGridGecmis.Columns[i].Width := 140; // Talep Edilen Adet
-      5:    dbGridGecmis.Columns[i].Width := 140; // Talep Tarihi
-      6:    dbGridGecmis.Columns[i].Width := 140; // Teslimat İşlemi
+      0, 1: dbGridGecmis.Columns[i].Width := 0;   
+      2:    dbGridGecmis.Columns[i].Width := 210; 
+      3:    dbGridGecmis.Columns[i].Width := 210; 
+      4:    dbGridGecmis.Columns[i].Width := 140;
+      5:    dbGridGecmis.Columns[i].Width := 140; 
+      6:    dbGridGecmis.Columns[i].Width := 140; 
     else
       dbGridGecmis.Columns[i].Width := 110;
     end;
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Geçmiş Talepleri Yükleme
--------------------------------------------------------------------------------}
 procedure TForm11.GecmisTalepleriYukle;
 var
   AramaMetni, TarihMetni: string;
@@ -202,9 +183,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Grid Hücrelerine Canlı Yeşil "Teslim Al" Butonu Çizme
--------------------------------------------------------------------------------}
 procedure TForm11.dbGridGecmisDrawColumnCell(Sender: TObject; const Rect: TRect;
   DataCol: Integer; Column: TColumn; State: TGridDrawState);
 var
@@ -230,7 +208,7 @@ begin
     end
     else
     begin
-      dbGridGecmis.Canvas.Brush.Color := RGB(40, 167, 69); // Canlı Yeşil
+      dbGridGecmis.Canvas.Brush.Color := RGB(40, 167, 69); 
       dbGridGecmis.Canvas.Font.Color := clWhite;
       dbGridGecmis.Canvas.Font.Style := [fsBold];
       dbGridGecmis.Canvas.FillRect(ButtonRect);
@@ -243,9 +221,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 Çift Tıklandığında Parti / SKT Girişi Alıp Stoğu Artırma ve Parti Açma
--------------------------------------------------------------------------------}
 procedure TForm11.dbGridGecmisDblClick(Sender: TObject);
 var
   UpdateQuery: TFDQuery;
@@ -255,7 +230,6 @@ var
 begin
   if qryGecmis.IsEmpty then Exit;
 
-  // Sadece "Teslimat İşlemi" sütununa çift tıklandığında çalışsın
   if dbGridGecmis.SelectedField.FieldName = 'Teslimat İşlemi' then
   begin
     Durum := qryGecmis.FieldByName('Teslimat İşlemi').AsString;
@@ -271,13 +245,11 @@ begin
     Miktar := qryGecmis.FieldByName('Talep Edilen Adet').AsInteger;
     IlacAdi := qryGecmis.FieldByName('İlaç Adı').AsString;
 
-    // 🌟 1. Eczacıdan Parti Numarasını İsteyelim
     PartiNo := 'PRT-2026-999';
     if not InputQuery('Parti / Lot Girişi', IlacAdi + ' için Parti Numarasını giriniz:', PartiNo) then
       Exit;
 
-    // 🌟 2. Eczacıdan Son Kullanma Tarihini İsteyelim (Format: YYYY-AA-GG)
-    SktStr := FormatDateTime('yyyy-mm-dd', Date + 365); // Varsayılan 1 yıl sonrası
+    SktStr := FormatDateTime('yyyy-mm-dd', Date + 365);
     if not InputQuery('Son Kullanma Tarihi (SKT)', IlacAdi + ' için Son Kullanma Tarihini giriniz (YYYY-AA-GG):', SktStr) then
       Exit;
 
@@ -287,13 +259,12 @@ begin
 
       UpdateQuery.Connection.StartTransaction;
       try
-        // 3. Merkez stoğu artır
+
         UpdateQuery.SQL.Text := 'UPDATE ILAC SET MerkezStokMiktari = MerkezStokMiktari + :pMiktar WHERE IlacID = :pIlacID;';
         UpdateQuery.ParamByName('pMiktar').AsInteger := Miktar;
         UpdateQuery.ParamByName('pIlacID').AsInteger := IlacID;
         UpdateQuery.ExecSQL;
 
-        // 🌟 4. ILAC_PARTI Tablosuna Yeni Parti Kaydı Aç (FIFO ve Miat Takibi İçin)
         UpdateQuery.SQL.Text :=
           'INSERT INTO ILAC_PARTI (IlacID, PartiNo, Miktar, KalanMiktar, SonKullanmaTarihi, GirisTarihi) ' +
           'VALUES (:pIlacID, :pPartiNo, :pMiktar, :pMiktar, :pSkt, datetime(''now'', ''localtime''));';
@@ -303,7 +274,6 @@ begin
         UpdateQuery.ParamByName('pSkt').AsString := Trim(SktStr);
         UpdateQuery.ExecSQL;
 
-        // 5. Sipariş Durumunu "Alındı" olarak güncelle
         UpdateQuery.SQL.Text := 'UPDATE ECZA_DEPOSU_SIPARIS SET Durum = ''Alındı'' WHERE SiparisID = :pID;';
         UpdateQuery.ParamByName('pID').AsInteger := SiparisID;
         UpdateQuery.ExecSQL;
@@ -311,7 +281,6 @@ begin
         UpdateQuery.Connection.Commit;
         ShowMessage(IlacAdi + ' için ' + IntToStr(Miktar) + ' adet ürün teslim alındı, merkeze eklendi ve yeni parti oluşturuldu! ✅');
 
-        // Listeyi tazele
         GecmisTalepleriYukle;
       except
         UpdateQuery.Connection.Rollback;
@@ -323,17 +292,11 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Arama Kutusu Değişiklik Olayı
--------------------------------------------------------------------------------}
 procedure TForm11.edtGecmisAraChange(Sender: TObject);
 begin
   GecmisTalepleriYukle;
 end;
 
-{-------------------------------------------------------------------------------
-  Tarih Seçimi Değişiklik Olayı
--------------------------------------------------------------------------------}
 procedure TForm11.dtpGecmisTarihChange(Sender: TObject);
 begin
   GecmisTalepleriYukle;
