@@ -13,7 +13,6 @@ type
   TForm8 = class(TForm)
     PageControl1: TPageControl;
 
-    // 1. Sekme Bileşenleri (Doktor Reçeteleri)
     pnlReceteTop: TPanel;
     edtServisAraRecete: TEdit;
     Label1: TLabel;
@@ -21,9 +20,8 @@ type
     edtEczaciNotu: TMemo;
     btnReceteGonderildi: TPanel;
     Label3: TLabel;
-    btnGecmisRecete: TPanel; // Geçmiş Butonu / Paneli
+    btnGecmisRecete: TPanel;
 
-    // 2. Sekme Bileşenleri (Hemşire Stok İstekleri)
     dbGridStokIstek: TDBGrid;
     Panel3: TPanel;
     edtStokNotu: TMemo;
@@ -32,15 +30,15 @@ type
     pnlStokTop: TPanel;
     edtServisAraStok: TEdit;
     Label2: TLabel;
-    btnGecmisStok: TPanel;   // Geçmiş Butonu / Paneli
+    btnGecmisStok: TPanel;   
 
-    // Veritabanı Bileşenleri
+
     qryReceteler: TFDQuery;
     qryStokIstek: TFDQuery;
     DataSourceReceteler: TDataSource;
     DataSourceStokIstek: TDataSource;
     Panel1: TPanel;
-    Panel2: TPanel; // 🌟 Tüm İlaçlar ve Stok Butonu / Paneli
+    Panel2: TPanel; 
 
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -73,9 +71,6 @@ implementation
 
 uses Unit1, Unit9, Unit10;
 
-{-------------------------------------------------------------------------------
-  FormCreate: Bağlantılar ve bileşen eşitlemeleri kurulur
--------------------------------------------------------------------------------}
 procedure TForm8.FormCreate(Sender: TObject);
 begin
   Self.Caption := 'Eczane Yönetim ve Sevk Paneli';
@@ -84,14 +79,12 @@ begin
   Self.Font.Name := 'Segoe UI';
   Self.Font.Size := 11;
 
-  // 🌟 Reçeteler Grid Font Ayarları (Yazı Boyutu: 11, Başlıklar: 11 Bold)
   dbGridReceteler.Font.Name := 'Segoe UI';
   dbGridReceteler.Font.Size := 11;
   dbGridReceteler.TitleFont.Name := 'Segoe UI';
   dbGridReceteler.TitleFont.Size := 11;
   dbGridReceteler.TitleFont.Style := [fsBold];
 
-  // 🌟 Stok İstekleri Grid Font Ayarları (Yazı Boyutu: 11, Başlıklar: 11 Bold)
   dbGridStokIstek.Font.Name := 'Segoe UI';
   dbGridStokIstek.Font.Size := 11;
   dbGridStokIstek.TitleFont.Name := 'Segoe UI';
@@ -125,9 +118,6 @@ begin
   edtStokNotu.Clear;
 end;
 
-{-------------------------------------------------------------------------------
-  FormActivate: Form ekrana gelince veriler yüklenir
--------------------------------------------------------------------------------}
 procedure TForm8.FormActivate(Sender: TObject);
 begin
   if not qryReceteler.Active then
@@ -137,18 +127,12 @@ begin
     StokIstekleriniYukle;
 end;
 
-{-------------------------------------------------------------------------------
-  Çarpıya (X) basıldığında uygulamanın tamamen sonlandırılması
--------------------------------------------------------------------------------}
 procedure TForm8.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
   Application.Terminate;
 end;
 
-{-------------------------------------------------------------------------------
-  Geçmiş Reçeteler Paneline Tıklanınca Unit9'u Açma
--------------------------------------------------------------------------------}
 procedure TForm8.btnGecmisReceteClick(Sender: TObject);
 begin
   if not Assigned(Form9) then
@@ -156,9 +140,6 @@ begin
   Form9.Show;
 end;
 
-{-------------------------------------------------------------------------------
-  Geçmiş Stok Paneline Tıklanınca Unit9'u Açma
--------------------------------------------------------------------------------}
 procedure TForm8.btnGecmisStokClick(Sender: TObject);
 begin
   if not Assigned(Form9) then
@@ -166,9 +147,6 @@ begin
   Form9.Show;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 Tüm İlaçlar ve Stok Listesine Tıklanınca Unit10'u Açma
--------------------------------------------------------------------------------}
 procedure TForm8.btnIlacListesiClick(Sender: TObject);
 begin
   if not Assigned(Form10) then
@@ -177,9 +155,6 @@ begin
   Form10.BringToFront;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 Grid Başlıklarını Türkçe Yapma ve Koyu (Bold) Hale Getirme
--------------------------------------------------------------------------------}
 procedure TForm8.BasliklariTurkceYap;
 var
   i: Integer;
@@ -196,7 +171,6 @@ begin
     dbGridReceteler.Columns[7].Title.Caption := 'Öğün';
     dbGridReceteler.Columns[8].Title.Caption := 'Adet';
 
-    // 🌟 Reçeteler başlıklarını koyu (bold) yap
     for i := 0 to dbGridReceteler.Columns.Count - 1 do
     begin
       dbGridReceteler.Columns[i].Title.Font.Name := 'Segoe UI';
@@ -214,7 +188,6 @@ begin
     dbGridStokIstek.Columns[4].Title.Caption := 'Etken Madde';
     dbGridStokIstek.Columns[5].Title.Caption := 'İstenen Miktar';
 
-    // 🌟 Stok İstek başlıklarını koyu (bold) yap
     for i := 0 to dbGridStokIstek.Columns.Count - 1 do
     begin
       dbGridStokIstek.Columns[i].Title.Font.Name := 'Segoe UI';
@@ -224,9 +197,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Sütun Genişliklerini Ayarlama
--------------------------------------------------------------------------------}
 procedure TForm8.SütunGenislikleriniAyarla;
 var
   i: Integer;
@@ -234,15 +204,15 @@ begin
   for i := 0 to dbGridReceteler.Columns.Count - 1 do
   begin
     case i of
-      0: dbGridReceteler.Columns[i].Width := 120; // Reçete Tarihi
-      1: dbGridReceteler.Columns[i].Width := 140; // Hasta Adı
-      2: dbGridReceteler.Columns[i].Width := 140; // Doktor Adı
-      3: dbGridReceteler.Columns[i].Width := 180; // Servis Adı
-      4: dbGridReceteler.Columns[i].Width := 170; // İlaç Adı
-      5: dbGridReceteler.Columns[i].Width := 170; // Etken Madde
-      6: dbGridReceteler.Columns[i].Width := 90;  // Doz
-      7: dbGridReceteler.Columns[i].Width := 160; // Öğün
-      8: dbGridReceteler.Columns[i].Width := 60;  // Adet
+      0: dbGridReceteler.Columns[i].Width := 120; 
+      1: dbGridReceteler.Columns[i].Width := 140; 
+      2: dbGridReceteler.Columns[i].Width := 140; 
+      3: dbGridReceteler.Columns[i].Width := 180; 
+      4: dbGridReceteler.Columns[i].Width := 170; 
+      5: dbGridReceteler.Columns[i].Width := 170; 
+      6: dbGridReceteler.Columns[i].Width := 90;  
+      7: dbGridReceteler.Columns[i].Width := 160; 
+      8: dbGridReceteler.Columns[i].Width := 60;  
     else
       dbGridReceteler.Columns[i].Width := 100;
     end;
@@ -251,12 +221,12 @@ begin
   for i := 0 to dbGridStokIstek.Columns.Count - 1 do
   begin
     case i of
-      0: dbGridStokIstek.Columns[i].Width := 120; // Talep Tarihi
-      1: dbGridStokIstek.Columns[i].Width := 230; // Servis Adı
-      2: dbGridStokIstek.Columns[i].Width := 170; // Hemşire Adı
-      3: dbGridStokIstek.Columns[i].Width := 190; // İlaç Adı
-      4: dbGridStokIstek.Columns[i].Width := 190; // Etken Madde
-      5: dbGridStokIstek.Columns[i].Width := 140; // İstenen Miktar
+      0: dbGridStokIstek.Columns[i].Width := 120; 
+      1: dbGridStokIstek.Columns[i].Width := 230; 
+      2: dbGridStokIstek.Columns[i].Width := 170; 
+      3: dbGridStokIstek.Columns[i].Width := 190; 
+      4: dbGridStokIstek.Columns[i].Width := 190; 
+      5: dbGridStokIstek.Columns[i].Width := 140; 
     else
       dbGridStokIstek.Columns[i].Width := 100;
     end;
@@ -330,9 +300,7 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  2. SEKME: Stok İsteklerini Yükle
--------------------------------------------------------------------------------}
+
 procedure TForm8.StokIstekleriniYukle;
 var
   ServisFiltre: string;
@@ -388,9 +356,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Anlık Arama Kutusu Değişiklik Olayları
--------------------------------------------------------------------------------}
 procedure TForm8.edtServisAraReceteChange(Sender: TObject);
 begin
   ReceteleriYukle;
@@ -401,9 +366,6 @@ begin
   StokIstekleriniYukle;
 end;
 
-{-------------------------------------------------------------------------------
-  Grid Hücre Tıklama Olayları
--------------------------------------------------------------------------------}
 procedure TForm8.dbGridRecetelerCellClick(Column: TColumn);
 var
   UpdateQuery: TFDQuery;
@@ -469,9 +431,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 Seçilen Reçetenin Gönderilmesi (FIFO / Parti ve Servis Stok Entegrasyonlu)
--------------------------------------------------------------------------------}
 procedure TForm8.btnReceteGonderildiClick(Sender: TObject);
 var
   UpdateQuery: TFDQuery;
@@ -493,7 +452,6 @@ begin
   try
     UpdateQuery.Connection := FrmLogin.FDConnection1;
 
-    // 1. İlgili İlaç ID ve Adet bilgilerini alalım
     UpdateQuery.SQL.Text :=
       'SELECT RD.DetayID, RD.IlacID, RD.Adet FROM RECETE_DETAY RD ' +
       'JOIN RECETE R ON RD.ReceteID = R.ReceteID ' +
@@ -515,7 +473,6 @@ begin
     Adet := UpdateQuery.FieldByName('Adet').AsInteger;
     if Adet <= 0 then Adet := 1;
 
-    // 2. Reçete Detay Durumunu 'Gonderildi' Olarak Güncelle
     UpdateQuery.Close;
     UpdateQuery.SQL.Text :=
       'UPDATE RECETE_DETAY ' +
@@ -532,7 +489,6 @@ begin
     UpdateQuery.ParamByName('Tarih').AsString := TarihStr;
     UpdateQuery.ExecSQL;
 
-    // 🌟 3. FIFO MANTIĞI: ILAC_PARTI Tablosundan En Yakın Miatlı Partiden Düş
     UpdateQuery.Close;
     UpdateQuery.SQL.Text :=
       'SELECT PartiID FROM ILAC_PARTI ' +
@@ -554,7 +510,6 @@ begin
       UpdateQuery.ExecSQL;
     end;
 
-    // 🌟 4. Servis Stok Miktarını Güncelle (Eğer servis stok kaydı varsa artır, yoksa oluştur)
     if ServisAdiStr <> 'Ayakta Tedavi' then
     begin
       UpdateQuery.Close;
@@ -575,9 +530,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 Seçilen Stok Talebinin Gönderilmesi (FIFO / Parti ve Servis Stok Entegrasyonlu)
--------------------------------------------------------------------------------}
 procedure TForm8.btnStokGonderildiClick(Sender: TObject);
 var
   UpdateQuery: TFDQuery;
@@ -599,7 +551,6 @@ begin
   try
     UpdateQuery.Connection := FrmLogin.FDConnection1;
 
-    // 1. İlaç ID ve İstenen Miktarı Alalım
     UpdateQuery.SQL.Text :=
       'SELECT T.TalepID, T.IlacID, T.IstenenMiktar FROM ECZANE_SEVK_TALEP T ' +
       'JOIN HEMSIRE HM ON T.HemsireID = HM.HemsireID ' +
@@ -620,7 +571,6 @@ begin
     Adet := UpdateQuery.FieldByName('IstenenMiktar').AsInteger;
     if Adet <= 0 then Adet := 1;
 
-    // 2. Sevk Talebini 'Gonderildi' Olarak Güncelle
     UpdateQuery.Close;
     UpdateQuery.SQL.Text :=
       'UPDATE ECZANE_SEVK_TALEP ' +
@@ -638,7 +588,6 @@ begin
     UpdateQuery.ParamByName('Tarih').AsString := TarihStr;
     UpdateQuery.ExecSQL;
 
-    // 🌟 3. FIFO MANTIĞI: ILAC_PARTI Tablosundan Düşüş Yap
     UpdateQuery.Close;
     UpdateQuery.SQL.Text :=
       'SELECT PartiID FROM ILAC_PARTI ' +
@@ -660,7 +609,6 @@ begin
       UpdateQuery.ExecSQL;
     end;
 
-    // 🌟 4. Servis Stoğunu Güncelle
     UpdateQuery.Close;
     UpdateQuery.SQL.Text :=
       'UPDATE SERVIS_STOK SET MevcutMiktar = MevcutMiktar + :pAdet ' +
