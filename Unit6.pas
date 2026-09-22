@@ -17,8 +17,8 @@ type
     tabTalepler: TTabSheet;
 
     pnlStokUst: TPanel;
-    edtArama: TEdit;         // Stok Arama Kutusu
-    edtTalepArama: TEdit;    // Talep Arama Kutusu
+    edtArama: TEdit;         
+    edtTalepArama: TEdit;    
     btnTalepEt: TPanel;
 
     dbgStoklar: TDBGrid;
@@ -114,12 +114,10 @@ begin
   StokListesiniYukle;
   TalepGecmisiniYukle;
 
-  // 🌟 AÇILIŞTA İLK SEKMEYİ (STOKLAR) AKTİF YAP
   if Assigned(pageControl) then
     pageControl.ActivePageIndex := 0;
 end;
 
-// 1. SERVİS İLAÇ STOKLARI (SKT SÜTUNU EKLENDİ)
 procedure TForm6.StokListesiniYukle;
 var
   AramaKelimesi, AktifServis, SqlWhere: string;
@@ -164,7 +162,6 @@ begin
   end;
 end;
 
-// 2. ECZANE TALEP GEÇMİŞİ
 procedure TForm6.TalepGecmisiniYukle;
 var
   AramaKelimesi, AktifServis, SqlWhere: string;
@@ -235,14 +232,14 @@ procedure TForm6.SutunGenislikleriniAyarla;
 begin
   if (Assigned(dbgStoklar.Columns)) and (dbgStoklar.Columns.Count >= 5) then
   begin
-    dbgStoklar.Columns[0].Width := 240; // İlaç Adı
-    dbgStoklar.Columns[1].Width := 220; // Etken Madde
-    dbgStoklar.Columns[2].Width := 110; // Mevcut Adet
-    dbgStoklar.Columns[3].Width := 110; // Kritik Düzey
-    dbgStoklar.Columns[4].Width := 140; // En Yakın SKT
+    dbgStoklar.Columns[0].Width := 240; 
+    dbgStoklar.Columns[1].Width := 220; 
+    dbgStoklar.Columns[2].Width := 110; 
+    dbgStoklar.Columns[3].Width := 110; 
+    dbgStoklar.Columns[4].Width := 140; 
 
     if dbgStoklar.Columns.Count > 5 then
-      dbgStoklar.Columns[5].Visible := False; // IlacID gizli
+      dbgStoklar.Columns[5].Visible := False; 
   end;
 
   if (Assigned(dbgTalepler.Columns)) and (dbgTalepler.Columns.Count >= 6) then
@@ -318,9 +315,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 Stok ve SKT (Miat) Durumuna Göre Renklendirme Mantığı (3 Aşamalı)
--------------------------------------------------------------------------------}
 procedure TForm6.dbgStoklarDrawColumnCell(Sender: TObject;
   const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
 var
@@ -335,7 +329,6 @@ begin
     Kritik := qryStokListesi.FieldByName('Kritik Düzey').AsInteger;
     SktStr := Trim(qryStokListesi.FieldByName('En Yakın SKT').AsString);
 
-    // SKT Hesaplamaları
     SktGecmis := False;
     SktYakin := False;
 
@@ -352,27 +345,23 @@ begin
       end;
     end;
 
-    // Satır seçili değilse renkleri uygula
     if not (gdSelected in State) then
     begin
-      // 1. KRİTİK SEVİYE 1 (Koyu Kırmızı): SKT Geçmiş veya Stok Biten (0 olan) İlaçlar
       if SktGecmis or (Mevcut <= 0) then
       begin
-        dbgStoklar.Canvas.Brush.Color := $0000008B; // Koyu Kırmızı
+        dbgStoklar.Canvas.Brush.Color := $0000008B;
         dbgStoklar.Canvas.Font.Color := clWhite;
         dbgStoklar.Canvas.Font.Style := [fsBold];
       end
-      // 2. KRİTİK SEVİYE 2 (Açık Kırmızı / Pembe): SKT Yaklaşan (<30 Gün) veya Stok < Kritik
       else if SktYakin or (Mevcut < Kritik) then
       begin
-        dbgStoklar.Canvas.Brush.Color := $00C0C0FF; // Açık Kırmızı / Pembe
+        dbgStoklar.Canvas.Brush.Color := $00C0C0FF;
         dbgStoklar.Canvas.Font.Color := clMaroon;
         dbgStoklar.Canvas.Font.Style := [fsBold];
       end
-      // 3. KRİTİK SEVİYE 3 (Sarı): Stok = Kritik Eşik
       else if Mevcut = Kritik then
       begin
-        dbgStoklar.Canvas.Brush.Color := $0080FFFF; // Sarı
+        dbgStoklar.Canvas.Brush.Color := $0080FFFF; 
         dbgStoklar.Canvas.Font.Color := $00003366;
         dbgStoklar.Canvas.Font.Style := [fsBold];
       end;
