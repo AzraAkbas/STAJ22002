@@ -249,12 +249,10 @@ begin
   if Assigned(FrmLogin) and (Trim(FrmLogin.GirisYapanServisAdi) <> '') then
     AktifServis := FrmLogin.GirisYapanServisAdi;
 
-  // Giriş yapan hemşire ID'sini dinamik olarak alıyoruz
   HemsireID := 1;
   if Assigned(FrmLogin) and (FrmLogin.GirisYapanHemsireID > 0) then
     HemsireID := FrmLogin.GirisYapanHemsireID;
 
-  // 1. Tedavi Uygulama Kaydını Ekle
   qryIslem.Close;
   qryIslem.SQL.Text :=
     'INSERT INTO TEDAVI_UYGULAMA (ReceteDetayID, HemsireID, Durum, Gerekce, Ogun, UygulamaTarihi) ' +
@@ -266,11 +264,8 @@ begin
   qryIslem.ParamByName('pOgun').AsString := OgunAdi;
   qryIslem.ExecSQL;
 
-  // 2. İLAÇ UYGULANDIĞINDA: Stoklarda herhangi bir değişiklik YAPILMAZ.
-  //    İLAÇ UYGULANMADIYSA: Servis stoğuna ve ilgili partiye geri iade et (+Adet).
   if DurumStr = 'Uygulanmadi' then
   begin
-    // Servis stoğunu artır
     qryIslem.Close;
     qryIslem.SQL.Text :=
       'UPDATE SERVIS_STOK SET MevcutMiktar = MevcutMiktar + :pAdet ' +
@@ -280,7 +275,6 @@ begin
     qryIslem.ParamByName('pIlacID').AsInteger := IlacID;
     qryIslem.ExecSQL;
 
-    // İlgili ilaca ait en uygun aktif partiye iade et
     qryIslem.Close;
     qryIslem.SQL.Text :=
       'SELECT PartiID FROM ILAC_PARTI ' +
@@ -340,7 +334,6 @@ end;
 
 procedure TfrmHemsireAnaSayfa.FormActivate(Sender: TObject);
 begin
-  // Boş bırakıldı
 end;
 
 procedure TfrmHemsireAnaSayfa.FormClose(Sender: TObject; var Action: TCloseAction);
