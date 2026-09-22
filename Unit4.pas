@@ -54,9 +54,6 @@ const
   REAL_AES_KEY = 'K9f!X2#mP8$zL5*q';
   REAL_AES_IV  = 'r4#mQ9$zK2!pL5*x';
 
-{-------------------------------------------------------------------------------
-  🔒 BAĞIMSIZ WINDOWS CNG AES-128 CBC DEŞİFRE FONKSİYONU
--------------------------------------------------------------------------------}
 type
   BCRYPT_ALG_HANDLE = Pointer;
   BCRYPT_KEY_HANDLE = Pointer;
@@ -120,7 +117,6 @@ begin
   PanelUst.BevelOuter := bvNone;
   PanelUst.Color := RGB(245, 247, 250);
 
-  // 🌟 Hücre ve Başlık Font Ayarları (Yazı Boyutu: 11, Başlıklar: 11 Bold)
   DBGridGecmis.Font.Name := 'Segoe UI';
   DBGridGecmis.Font.Size := 11;
   DBGridGecmis.Font.Style := [];
@@ -154,8 +150,8 @@ begin
   begin
     if TGridHack(DBGridGecmis).RowHeights[CurrentRow] <> 38 then
     begin
-      TGridHack(DBGridGecmis).RowHeights[CurrentRow] := 38; // Satır yüksekliği 11 pt için ayarlandı
-      TGridHack(DBGridGecmis).RowHeights[0] := 32;         // Başlık satır yüksekliği ayarlandı
+      TGridHack(DBGridGecmis).RowHeights[CurrentRow] := 38; 
+      TGridHack(DBGridGecmis).RowHeights[0] := 32;        
     end;
   end;
 
@@ -215,9 +211,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  🔒 GÜVENLİ VE TEK EKRANLI RAPORLAMA MOTORU
--------------------------------------------------------------------------------}
 procedure TFormGecmisReceteler.PDFRaporOlustur(const AReceteID: Integer);
 var
   RaporQuery: TFDQuery;
