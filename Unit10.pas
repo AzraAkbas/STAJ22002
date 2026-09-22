@@ -52,9 +52,6 @@ implementation
 
 uses Unit1, Unit11, Unit12;
 
-{-------------------------------------------------------------------------------
-  FormCreate: Bağlantı, font ve olay atamaları kurulur
--------------------------------------------------------------------------------}
 procedure TForm10.FormCreate(Sender: TObject);
 begin
   Self.Caption := 'Hastane İlaç ve Merkez Stok Listesi';
@@ -296,9 +293,6 @@ begin
   DepoSiparisOlustur(IlacID, IlacAdiStr);
 end;
 
-{-------------------------------------------------------------------------------
-  🌟 Stok ve SKT (Miat) Durumuna Göre Renklendirme Mantığı
--------------------------------------------------------------------------------}
 procedure TForm10.dbGridIlaclarDrawColumnCell(Sender: TObject; const Rect: TRect;
   DataCol: Integer; Column: TColumn; State: TGridDrawState);
 var
@@ -313,7 +307,6 @@ begin
     KritikEsik := qryIlaclar.FieldByName('Tanımlanan Kritik Stok').AsInteger;
     SktStr := Trim(qryIlaclar.FieldByName('En Yakın SKT').AsString);
 
-    // SKT Hesaplamaları
     SktGecmis := False;
     SktYakin := False;
 
@@ -330,27 +323,24 @@ begin
       end;
     end;
 
-    // Satır seçili değilse renkleri uygula
     if not (gdSelected in State) then
     begin
-      // 1. KRİTİK SEVİYE 1 (Koyu Kırmızı): SKT Geçmiş veya Stok Biten (0 olan) İlaçlar
+
       if SktGecmis or (MevcutStok <= 0) then
       begin
-        dbGridIlaclar.Canvas.Brush.Color := $0000008B; // Koyu Kırmızı
+        dbGridIlaclar.Canvas.Brush.Color := $0000008B; 
         dbGridIlaclar.Canvas.Font.Color := clWhite;
         dbGridIlaclar.Canvas.Font.Style := [fsBold];
       end
-      // 2. KRİTİK SEVİYE 2 (Kırmızı / Pembe): SKT Yaklaşan (<30 Gün) veya Stok < Kritik
       else if SktYakin or (MevcutStok < KritikEsik) then
       begin
-        dbGridIlaclar.Canvas.Brush.Color := $00C0C0FF; // Açık Kırmızı / Pembe
+        dbGridIlaclar.Canvas.Brush.Color := $00C0C0FF;
         dbGridIlaclar.Canvas.Font.Color := clMaroon;
         dbGridIlaclar.Canvas.Font.Style := [fsBold];
       end
-      // 3. KRİTİK SEVİYE 3 (Sarı): Stok = Kritik Eşik
       else if MevcutStok = KritikEsik then
       begin
-        dbGridIlaclar.Canvas.Brush.Color := $0080FFFF; // Sarı
+        dbGridIlaclar.Canvas.Brush.Color := $0080FFFF;
         dbGridIlaclar.Canvas.Font.Color := $00003366;
         dbGridIlaclar.Canvas.Font.Style := [fsBold];
       end;
