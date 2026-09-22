@@ -111,9 +111,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Form İlk Açıldığında Sadece Doktorun Kendi Uzmanlık Servisindeki Aktif Hastalar Listelenir
--------------------------------------------------------------------------------}
 procedure TFormDoktorPaneli.FormCreate(Sender: TObject);
 begin
   try
@@ -129,7 +126,6 @@ begin
       FDQueryHastalar.Connection := FrmLogin.FDConnection1;
     end;
 
-    // 🌟 Hücre ve Başlık Font Ayarları (Yazı Boyutu: 11, Başlıklar: 11 Bold)
     DBGridHastalar.Font.Name := 'Segoe UI';
     DBGridHastalar.Font.Size := 11;
     DBGridHastalar.TitleFont.Name := 'Segoe UI';
@@ -192,10 +188,6 @@ procedure TFormDoktorPaneli.FormDestroy(Sender: TObject);
 begin
   Application.Terminate;
 end;
-
-{-------------------------------------------------------------------------------
-  Arama Yapıldığında Tüm Hastane Veritabanı Üzerinde (Taburcu Olanlar Dahil) Ad / Soyad Sorgulama Sağlanır
--------------------------------------------------------------------------------}
 procedure TFormDoktorPaneli.AramaIsleminiYap;
 var
   ArananVal: string;
@@ -206,7 +198,6 @@ begin
 
   FDQueryHastalar.Close;
 
-  // Arama kutusu boşaltıldığında doktorun kendi servisindeki aktif hastalar listelenir.
   if ArananVal.IsEmpty then
   begin
     FDQueryHastalar.SQL.Text :=
@@ -225,7 +216,7 @@ begin
   end
   else
   begin
-    // Arama kutusuna veri girilirse branş/servis sınırı kalkar ve taburcu olanlar dahil tüm hastanede arama yapılır.
+
     FDQueryHastalar.SQL.Text :=
       'SELECT h.HastaID, ' +
       '       (h.Ad || '' '' || h.Soyad) AS AdSoyad, ' +
