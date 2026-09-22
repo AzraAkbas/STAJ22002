@@ -13,21 +13,18 @@ type
   TForm9 = class(TForm)
     PageControl1: TPageControl;
 
-    // 1. Sekme Bileşenleri (Geçmiş Doktor Reçeteleri)
     pnlReceteTop: TPanel;
     edtServisAraRecete: TEdit;
     Label1: TLabel;
     dbGridReceteler: TDBGrid;
     dtpTarihRecete: TDateTimePicker;
 
-    // 2. Sekme Bileşenleri (Geçmiş Hemşire Stok İstekleri)
     dbGridStokIstek: TDBGrid;
     pnlStokTop: TPanel;
     edtServisAraStok: TEdit;
     Label2: TLabel;
     dtpTarihStok: TDateTimePicker;
 
-    // Veritabanı Bileşenleri
     qryReceteler: TFDQuery;
     qryStokIstek: TFDQuery;
     DataSourceReceteler: TDataSource;
@@ -60,9 +57,7 @@ implementation
 
 uses Unit1;
 
-{-------------------------------------------------------------------------------
-  FormCreate: Bağlantılar ve bileşen eşitlemeleri kurulur
--------------------------------------------------------------------------------}
+
 procedure TForm9.FormCreate(Sender: TObject);
 begin
   Self.Caption := 'Geçmiş Sevk ve Gönderim İşlemleri';
@@ -71,14 +66,12 @@ begin
   Self.Font.Name := 'Segoe UI';
   Self.Font.Size := 11;
 
-  // Reçeteler Grid Font Ayarları
   dbGridReceteler.Font.Name := 'Segoe UI';
   dbGridReceteler.Font.Size := 11;
   dbGridReceteler.TitleFont.Name := 'Segoe UI';
   dbGridReceteler.TitleFont.Size := 11;
   dbGridReceteler.TitleFont.Style := [fsBold];
 
-  // Stok İstekleri Grid Font Ayarları
   dbGridStokIstek.Font.Name := 'Segoe UI';
   dbGridStokIstek.Font.Size := 11;
   dbGridStokIstek.TitleFont.Name := 'Segoe UI';
@@ -112,9 +105,6 @@ begin
   dtpTarihStok.Date := Date;
 end;
 
-{-------------------------------------------------------------------------------
-  FormActivate: Form ekrana gelince veriler yüklenir
--------------------------------------------------------------------------------}
 procedure TForm9.FormActivate(Sender: TObject);
 begin
   if not qryReceteler.Active then
@@ -124,17 +114,11 @@ begin
     StokIstekleriniYukle;
 end;
 
-{-------------------------------------------------------------------------------
-  FormClose: Form kapatılır
--------------------------------------------------------------------------------}
 procedure TForm9.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   Action := caFree;
 end;
-
-{-------------------------------------------------------------------------------
-  🌟 Grid Başlıklarını Türkçe Yapma ve Koyu (Bold) Hale Getirme
--------------------------------------------------------------------------------}
+}
 procedure TForm9.BasliklariTurkceYap;
 var
   i: Integer;
@@ -152,7 +136,6 @@ begin
     dbGridReceteler.Columns[8].Title.Caption := 'Adet';
     dbGridReceteler.Columns[9].Title.Caption := 'İşlemi Yapan Eczacı';
 
-    // 🌟 Reçeteler grid başlıklarını tek tek koyu (bold) yap
     for i := 0 to dbGridReceteler.Columns.Count - 1 do
     begin
       dbGridReceteler.Columns[i].Title.Font.Name := 'Segoe UI';
@@ -171,7 +154,6 @@ begin
     dbGridStokIstek.Columns[5].Title.Caption := 'İstenen Miktar';
     dbGridStokIstek.Columns[6].Title.Caption := 'İşlemi Yapan Eczacı';
 
-    // 🌟 Stok İstekleri grid başlıklarını tek tek koyu (bold) yap
     for i := 0 to dbGridStokIstek.Columns.Count - 1 do
     begin
       dbGridStokIstek.Columns[i].Title.Font.Name := 'Segoe UI';
@@ -181,9 +163,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Sütun Genişliklerini Ayarlama
--------------------------------------------------------------------------------}
 procedure TForm9.SütunGenislikleriniAyarla;
 var
   i: Integer;
@@ -191,16 +170,16 @@ begin
   for i := 0 to dbGridReceteler.Columns.Count - 1 do
   begin
     case i of
-      0: dbGridReceteler.Columns[i].Width := 150; // Gönderim Tarihi
-      1: dbGridReceteler.Columns[i].Width := 140; // Hasta Adı
-      2: dbGridReceteler.Columns[i].Width := 140; // Doktor Adı
-      3: dbGridReceteler.Columns[i].Width := 170; // Servis Adı
-      4: dbGridReceteler.Columns[i].Width := 160; // İlaç Adı
-      5: dbGridReceteler.Columns[i].Width := 160; // Etken Madde
-      6: dbGridReceteler.Columns[i].Width := 80;  // Doz
-      7: dbGridReceteler.Columns[i].Width := 140; // Öğün
-      8: dbGridReceteler.Columns[i].Width := 60;  // Adet
-      9: dbGridReceteler.Columns[i].Width := 170; // Eczacı Adı
+      0: dbGridReceteler.Columns[i].Width := 150; 
+      1: dbGridReceteler.Columns[i].Width := 140; 
+      2: dbGridReceteler.Columns[i].Width := 140; 
+      3: dbGridReceteler.Columns[i].Width := 170; 
+      4: dbGridReceteler.Columns[i].Width := 160; 
+      5: dbGridReceteler.Columns[i].Width := 160; 
+      6: dbGridReceteler.Columns[i].Width := 80;  
+      7: dbGridReceteler.Columns[i].Width := 140; 
+      8: dbGridReceteler.Columns[i].Width := 60;  
+      9: dbGridReceteler.Columns[i].Width := 170; 
     else
       dbGridReceteler.Columns[i].Width := 100;
     end;
@@ -209,22 +188,19 @@ begin
   for i := 0 to dbGridStokIstek.Columns.Count - 1 do
   begin
     case i of
-      0: dbGridStokIstek.Columns[i].Width := 150; // Gönderim Tarihi
-      1: dbGridStokIstek.Columns[i].Width := 200; // Servis Adı
-      2: dbGridStokIstek.Columns[i].Width := 160; // Hemşire Adı
-      3: dbGridStokIstek.Columns[i].Width := 170; // İlaç Adı
-      4: dbGridStokIstek.Columns[i].Width := 170; // Etken Madde
-      5: dbGridStokIstek.Columns[i].Width := 130; // İstenen Miktar
-      6: dbGridStokIstek.Columns[i].Width := 170; // Eczacı Adı
+      0: dbGridStokIstek.Columns[i].Width := 150; 
+      1: dbGridStokIstek.Columns[i].Width := 200; 
+      2: dbGridStokIstek.Columns[i].Width := 160; 
+      3: dbGridStokIstek.Columns[i].Width := 170; 
+      4: dbGridStokIstek.Columns[i].Width := 170; 
+      5: dbGridStokIstek.Columns[i].Width := 130; 
+      6: dbGridStokIstek.Columns[i].Width := 170; 
     else
       dbGridStokIstek.Columns[i].Width := 100;
     end;
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  1. SEKME: Geçmiş Reçeteleri Yükle (Servis ve Tarih Filtreli)
--------------------------------------------------------------------------------}
 procedure TForm9.ReceteleriYukle;
 var
   ServisFiltre, TarihFiltre: string;
@@ -277,9 +253,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  2. SEKME: Geçmiş Stok İsteklerini Yükle (Servis ve Tarih Filtreli)
--------------------------------------------------------------------------------}
 procedure TForm9.StokIstekleriniYukle;
 var
   ServisFiltre, TarihFiltre: string;
@@ -326,9 +299,6 @@ begin
   end;
 end;
 
-{-------------------------------------------------------------------------------
-  Arama ve Tarih Değişiklik Olayları
--------------------------------------------------------------------------------}
 procedure TForm9.edtServisAraReceteChange(Sender: TObject);
 begin
   ReceteleriYukle;
